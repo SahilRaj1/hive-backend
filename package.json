@@ -1,0 +1,27 @@
+{
+  "name": "hive-backend",
+  "version": "1.0.0",
+  "description": "Hive API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SahilRaj1/hive-backend.git"
+  },
+  "author": "Ritika and Sahil",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SahilRaj1/hive-backend/issues"
+  },
+  "homepage": "https://github.com/SahilRaj1/hive-backend#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20",
+    "prettier": "^2.8.3"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.9.0"
+  }
+}
