@@ -2,6 +2,7 @@ const connectToMongo = require('./db');
 const express = require('express');
 const cors = require('cors');
 const env = require('dotenv');
+const path = require('path')
 env.config({ path: './.env' });
 // AVAILABLE ROUTERS
 const authRouter = require(`${__dirname}/routes/authRoutes`);
@@ -23,7 +24,6 @@ app.use(express.json());
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter, followRouter);
 app.use('/api/posts', postRouter, likeRouter, commentRouter);
-
 
 app.listen(port, ()=> {
     console.log(`server listening at http://localhost:${port}`);

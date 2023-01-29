@@ -23,7 +23,8 @@ exports.signup = async (req, res) => {
             username: req.body.username,
             name: req.body.name,
             email: req.body.email,
-            password: req.body.password
+            password: req.body.password,
+            bio: req.body.bio
         });
 
         const token = signToken(newUser._id);
@@ -32,7 +33,7 @@ exports.signup = async (req, res) => {
             status: 'success',
             token,
             data: {
-                user,
+                newUser,
             },
         });
     }
@@ -41,3 +42,26 @@ exports.signup = async (req, res) => {
     }
 }
 
+// POST /auth/login : Login a user 
+exports.login = async (req, res) => {
+    try {
+        const {email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Please provide all the fields.' });
+        }
+        const user = await User.findOne({ email });
+       
+        if (!user) {
+            return res.status(500).json({ message: 'Bad auth!' });
+        }
+        const token = signToken(user._id);
+        res.status(201).json({
+            status: 'success',
+            token
+        });
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
