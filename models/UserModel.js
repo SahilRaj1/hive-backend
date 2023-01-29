@@ -25,8 +25,7 @@ const UserSchema = new mongoose.Schema({
         contentType: String
     },
     bio: {
-        type: String,
-        required: true
+        type: String
     },
     following: [{
         type: mongoose.Schema.ObjectId,
@@ -47,4 +46,4 @@ const UserSchema = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('users', UserSchema);
