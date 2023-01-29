@@ -20,6 +20,10 @@ const CommentSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    updated_on: {
+        type: Date,
+        default: Date.now
+    },
 
 });
 
