@@ -1,10 +1,13 @@
-
 const mongoose = require('mongoose');
-const mongoURI = `mongodb+srv://ritikasahil:${process.env.MONGO_PASSWORD}@sahilritika.muqj5ci.mongodb.net/HiveDB`;
+const mongoURI = `mongodb+srv://ritikasahil:ritikasahil@sahilritika.muqj5ci.mongodb.net/hivedb`;
 
 const connectToMongo = ()=> {
-    mongoose.connect(mongoURI, { useNewUrlParser: true, useCreateIndex: true },()=> {
-        console.log("Conected to mongo cloud successfully");
+    mongoose.connect(mongoURI, { useNewUrlParser: true,useUnifiedTopology: true },(error)=> {
+        if (error) {
+            console.log(error.message);
+        } else {
+            console.log("Conected to mongo cloud successfully");
+        }
     });
 }
 

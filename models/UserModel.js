@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const UserSchema = mongoose.Schema({
+const UserSchema = new mongoose.Schema({
     
     name: {
         type: String,
@@ -29,11 +29,11 @@ const UserSchema = mongoose.Schema({
         required: true
     },
     following: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.ObjectId,
         ref: 'User'
     }],
     followers: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.ObjectId,
         ref: 'User'
     }],
     created_on: {
