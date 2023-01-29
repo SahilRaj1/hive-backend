@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const UserSchema = mongoose.Schema({
+const UserSchema = new mongoose.Schema({
     
     name: {
         type: String,
@@ -25,15 +25,14 @@ const UserSchema = mongoose.Schema({
         contentType: String
     },
     bio: {
-        type: String,
-        required: true
+        type: String
     },
     following: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.ObjectId,
         ref: 'User'
     }],
     followers: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.ObjectId,
         ref: 'User'
     }],
     created_on: {
@@ -47,4 +46,4 @@ const UserSchema = mongoose.Schema({
 
 });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('users', UserSchema);

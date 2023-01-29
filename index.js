@@ -1,7 +1,8 @@
 const connectToMongo = require('./db');
 const express = require('express');
 const cors = require('cors');
-
+const env = require('dotenv');
+env.config({ path: './.env' });
 // AVAILABLE ROUTERS
 const authRouter = require(`${__dirname}/routes/authRoutes`);
 const commentRouter = require(`${__dirname}/routes/commentRoutes`);
