@@ -4,6 +4,7 @@ const cors = require('cors');
 const env = require('dotenv');
 const path = require('path')
 env.config({ path: './.env' });
+
 // AVAILABLE ROUTERS
 const authRouter = require(`${__dirname}/routes/authRoutes`);
 const commentRouter = require(`${__dirname}/routes/commentRoutes`);
@@ -18,7 +19,6 @@ const port = 5000;
 
 app.use(cors());
 app.use(express.json());
-
 
 // AVAIABLE ROUTES
 app.use('/api/auth', authRouter);
