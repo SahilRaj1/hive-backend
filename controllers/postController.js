@@ -1,4 +1,7 @@
 const Post = require(`${__dirname}/../models/PostModel`);
+const multer = require('multer');
+const sharp = require('sharp');
+const path = require('path');
 
 // GET /posts : Retrieve a list of all posts (Login Required)
 exports.fetchAllPosts = async (req, res) => {
@@ -34,6 +37,43 @@ exports.fetchAllPostsOfUser = async (req, res) => {
             results: posts.length,
             data: {
               posts,
+            },
+          });
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal server error");
+    }
+};
+
+// POST /posts : Create a new post (Login Required)
+// Uploading images using multer
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
+exports.createPost = async (req, res) => {
+    try {
+
+        const { caption } = req.body;
+        const img = await sharp(req.file.buffer)
+            .resize({ width: 300, height: 300 })
+            .toBuffer();
+
+        // creating new post object
+        const post = new Post({
+            caption,
+            img,
+            user_id: req.user.id,
+        });
+
+        const savedPost = await post.save();
+
+        // sending response
+        res.status(201).json({
+            status: 'success',
+            results: 1,
+            data: {
+              savedPost,
             },
           });
 
@@ -124,7 +164,7 @@ exports.deletePost = async (req, res) => {
         }
 
         // deleting the post
-        post = Post.findByIdAndDelete(req.params.id);
+        post = await Post.findByIdAndDelete(req.params.id);
 
         // sending response
         res.status(200).json({
