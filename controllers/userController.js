@@ -1,7 +1,7 @@
 const User = require(`${__dirname}/../models/UserModel`);
 const mongoose = require('mongoose');
 
-
+// GET /users : Retrieve a list of all users (login required)
 exports.getAllUsers = async (req, res) => {
     try {
         const users = await User.find();
@@ -20,6 +20,8 @@ exports.getAllUsers = async (req, res) => {
         res.status(500).send("Internal server error");
     }
 }
+
+// GET /users/:id : Retrieve a specific user by id (login required)
 exports.getUser = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
@@ -42,6 +44,7 @@ exports.getUser = async (req, res) => {
     }
 }
 
+// PUT /users/:id : Update a specific user by id (login required)
 exports.updateMe = async (req, res) => {
     try {
         const { name, email, username, profile_pic, bio } = req.body;
@@ -65,7 +68,7 @@ exports.updateMe = async (req, res) => {
         if (!user) {
             return res.status(404).send("Not Found");
         }
-        // Checking if a user is updating someone else's note
+
         if (user._id.toString() !== req.user.id) {
             return res.status(401).send("Not allowed");
         }
@@ -87,6 +90,8 @@ exports.updateMe = async (req, res) => {
         res.status(500).send("Internal server error");
     }
 }
+
+// DELETE /users/:id : Delete a specific user by id (login required)
 exports.deleteUser = async (req, res) => {
     try{
         let userDel = await User.findById(req.params.id);
