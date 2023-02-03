@@ -46,7 +46,11 @@ exports.signup = async (req, res) => {
         console.log(error.message);
         res.status(500).send("Internal server error");
     }
-};
+    catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: 'Bad auth!' });
+    }
+}
 
 // POST /auth/login : Login a user
 exports.login = async (req, res) => {
@@ -65,11 +69,17 @@ exports.login = async (req, res) => {
         }
         const token = signToken(user._id);
         res.status(201).json({
-            status: "success",
+            status: 'success',
             token,
+            user
         });
     } catch (error) {
         console.log(error.message);
         res.status(500).send("Internal server error");
     }
-};
+    catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: 'Bad auth!' });
+    }
+}
+
