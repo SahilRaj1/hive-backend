@@ -39,6 +39,7 @@ exports.signup = async (req, res) => {
     }
     catch (err) {
         console.log(err);
+        return res.status(500).json({ message: 'Bad auth!' });
     }
 }
 
@@ -58,10 +59,13 @@ exports.login = async (req, res) => {
         const token = signToken(user._id);
         res.status(201).json({
             status: 'success',
-            token
+            token,
+            user
         });
     }
     catch (err) {
         console.log(err);
+        return res.status(500).json({ message: 'Bad auth!' });
     }
 }
+

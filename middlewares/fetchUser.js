@@ -1,4 +1,7 @@
 const jwt = require('jsonwebtoken');
+const env = require('dotenv');
+const path = require('path')
+env.config({ path: './.env' });
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const fetchuser = (req, res, next) => {
@@ -10,9 +13,9 @@ const fetchuser = (req, res, next) => {
     }
     
     try {
-        
         const data = jwt.verify(token, JWT_SECRET);
         req.user = data.user;
+        console.log(req.user);
         next();
 
     } catch (error) {
