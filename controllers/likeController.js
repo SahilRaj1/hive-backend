@@ -1,10 +1,10 @@
 const Like = require(`${__dirname}/../models/LikeModel`);
 
-
 // GET /posts/:id/likes : Retrieve a list of all users who liked a specific post (Login Required)
 exports.fetchLikesOnPost = async (req, res) => {
     try {
 
+        // finding the likes on a post
         const likes = await Like.find({
             post_id: req.params.id,
         });
@@ -16,7 +16,7 @@ exports.fetchLikesOnPost = async (req, res) => {
             data: {
               likes,
             },
-          });
+        });
 
     } catch (error) {
         console.log(error.message);
@@ -43,7 +43,7 @@ exports.likePost = async (req, res) => {
             data: {
               savedLike,
             },
-          });
+        });
 
     } catch (error) {
         console.log(error.message);
@@ -55,6 +55,7 @@ exports.likePost = async (req, res) => {
 exports.unlikePost = async (req, res) => {
     try {
         
+        // finding the like to be deleted
         const like = await post.findById(req.params.like_id);
         if (!like) {
             return res.status(404).send("Not found");
@@ -70,7 +71,7 @@ exports.unlikePost = async (req, res) => {
             data: {
               like,
             },
-          });
+        });
 
     } catch (error) {
         console.log(error.message);

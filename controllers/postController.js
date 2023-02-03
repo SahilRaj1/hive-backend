@@ -7,6 +7,7 @@ const path = require('path');
 exports.fetchAllPosts = async (req, res) => {
     try {
 
+        // finding all posts
         const posts = await Post.find();
 
         // sending response
@@ -16,7 +17,7 @@ exports.fetchAllPosts = async (req, res) => {
             data: {
               posts,
             },
-          });
+        });
 
     } catch (error) {
         console.log(error.message);
@@ -38,7 +39,7 @@ exports.fetchAllPostsOfUser = async (req, res) => {
             data: {
               posts,
             },
-          });
+        });
 
     } catch (error) {
         console.log(error.message);
@@ -75,7 +76,7 @@ exports.createPost = async (req, res) => {
             data: {
               savedPost,
             },
-          });
+        });
 
     } catch (error) {
         console.log(error.message);
@@ -100,7 +101,7 @@ exports.fetchPost = async (req, res) => {
             data: {
               post,
             },
-          });
+        });
 
     } catch (error) {
         console.log(error.message);
@@ -115,10 +116,8 @@ exports.updatePost = async (req, res) => {
         const { caption } = req.body;
         const newPost = {};
 
-        if (caption) {
-            newPost.caption = caption;
-            newPost.updated_on = Date.now();
-        }
+        newPost.caption = caption;
+        newPost.updated_on = Date.now();
 
         // finding the post to be updated
         let post = await Post.findById(req.params.id);
@@ -145,7 +144,7 @@ exports.updatePost = async (req, res) => {
             data: {
               post,
             },
-          });
+        });
 
     } catch (error) {
         console.log(error.message);
@@ -173,7 +172,7 @@ exports.deletePost = async (req, res) => {
             data: {
               post,
             },
-          });
+        });
 
     } catch (error) {
         console.log(error.message);
