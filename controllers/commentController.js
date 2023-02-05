@@ -1,4 +1,5 @@
 const Comment = require(`${__dirname}/../models/CommentModel`);
+const Post = require(`${__dirname}/../models/PostModel`);
 
 // GET /posts/:id/comments : Retrieve a list of all comments on a specific post (Login Required)
 exports.fetchCommentsOnPost = async (req, res) => {
@@ -105,6 +106,14 @@ exports.deleteComment = async (req, res) => {
         const comment = await Comment.findById(req.params.comment_id);
         if (!comment) {
             return res.status(404).send("Not found");
+        }
+
+        // post user deleting comment
+        const post = Post.findById(comment.post_id);
+
+        // checking if a user is deleting someone else's comment
+        if (comment.user_id.toString() !== req.user.id || post.user_id.toString() !== req.user.id) {
+            return res.status(401).send("Not allowed");
         }
 
         // deleting the post

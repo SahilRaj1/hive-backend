@@ -1,4 +1,6 @@
 const Post = require(`${__dirname}/../models/PostModel`);
+const Like = require(`${__dirname}/../models/LikeModel`);
+const Comment = require(`${__dirname}/../models/CommentModel`);
 const multer = require('multer');
 const sharp = require('sharp');
 const path = require('path');
@@ -161,6 +163,10 @@ exports.deletePost = async (req, res) => {
         if (!post) {
             return res.status(404).send("Not found");
         }
+
+        // deletign all the likes and comments on the post
+        Like.deleteMany({post_id: req.params.id});
+        Comment.deleteMany({post_id: req.params.id});
 
         // deleting the post
         post = await Post.findByIdAndDelete(req.params.id);
