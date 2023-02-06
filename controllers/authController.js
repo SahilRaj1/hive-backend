@@ -1,6 +1,5 @@
 const User = require(`${__dirname}/../models/UserModel`);
-const jwt = require("jsonwebtoken");
-const signToken = require(`${__dirname}/../middlewares/createToken`);
+const signToken = require(`${__dirname}/../token`);
 
 // POST /auth/signup : Register a new user
 exports.signup = async (req, res) => {

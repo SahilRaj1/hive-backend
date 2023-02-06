@@ -50,22 +50,15 @@ exports.fetchAllPostsOfUser = async (req, res) => {
 };
 
 // POST /posts : Create a new post (Login Required)
-// Uploading images using multer
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
-
 exports.createPost = async (req, res) => {
     try {
 
         const { caption } = req.body;
-        const img = await sharp(req.file.buffer)
-            .resize({ width: 300, height: 300 })
-            .toBuffer();
 
         // creating new post object
         const post = new Post({
             caption,
-            img,
+            img: req.file.filename,
             user_id: req.user.id,
         });
 

@@ -1,6 +1,4 @@
 const User = require(`${__dirname}/../models/UserModel`);
-const mongoose = require('mongoose');
-
 
 exports.getAllUsers = async (req, res) => {
     try {
