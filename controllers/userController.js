@@ -1,4 +1,5 @@
 const User = require(`${__dirname}/../models/UserModel`);
+const Post = require(`${__dirname}/../models/PostModel`);
 const mongoose = require('mongoose');
 
 // GET /users : Retrieve a list of all users (login required)
@@ -64,6 +65,7 @@ exports.updateMe = async (req, res) => {
         if (bio) {
             newUser.bio = bio;
         }
+        newUser.updated_on = Date.now();
         let user = await User.findById(req.params.id);
         if (!user) {
             return res.status(404).send("Not Found");
@@ -101,6 +103,7 @@ exports.deleteUser = async (req, res) => {
         if (req.user.id != req.params.id) {
             res.status(404).send("Not allowed");
         }
+        const posts = await Post.deleteMany({user_id: req.params.id});
         const user = await User.findByIdAndDelete(req.params.id);
         res.status(204).json({
             status: 'success',
