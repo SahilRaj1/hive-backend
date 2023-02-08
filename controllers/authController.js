@@ -76,10 +76,10 @@ exports.login = async (req, res) => {
                 token,
                 user
             });
-        }else{
+        } else {
             return res.status(500).json({ message: "Incorrect email or password!" });
         }
-        
+
 
     } catch (error) {
         console.log(error.message);
@@ -87,24 +87,24 @@ exports.login = async (req, res) => {
     }
 }
 
-exports.updatePassword = async(req, res)=>{
-    try{
-
+// PUT /auth/changePassword : Update the user password
+exports.updatePassword = async (req, res) => {
+    try {
         const userData = await User.findById(req.user.id);
         if (!userData) {
             return res.status(500).json({ message: "Authentication failed!" });
         }
 
-        const {newPass, currPass} = req.body;
+        const { newPass, currPass } = req.body;
 
         // check if the entered current password is correct or not
         const cmp = await bcrypt.compare(req.body.currPass, userData.password);
-        if(!cmp){
+        if (!cmp) {
             return res.status(500).json({ message: "The current password is incorrect!" });
         }
 
         // check if the entered current password and new password are same or not
-        if(newPass === currPass){
+        if (newPass === currPass) {
             return res.status(500).json({ message: "New password cannot be equal to the old password!" });
         }
 
@@ -120,14 +120,14 @@ exports.updatePassword = async(req, res)=>{
             { $set: newUser },
             { new: true }
         );
-        
+
         res.status(200).json({
             status: 'success',
             data: {
                 message: "Password changed successfully!"
             },
         });
-    }catch(error){
+    } catch (error) {
         console.log(error.message);
         res.status(500).send("Internal server error");
     }
