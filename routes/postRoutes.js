@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const fetchUser = require(`${__dirname}/../middlewares/fetchUser`);
 const postController = require(`${__dirname}/../controllers/postController`);
-const upload = require(`${__dirname}/../middlewares.uploadImage`);
+const upload = require(`${__dirname}/../middlewares/uploadImage`);
 
 router.get("/", fetchUser, postController.fetchAllPosts);
 router.get("/:user_id", fetchUser, postController.fetchAllPostsOfUser);
