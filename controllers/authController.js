@@ -1,7 +1,7 @@
 const User = require(`${__dirname}/../models/UserModel`);
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const signToken = require(`${__dirname}/../middlewares/createToken`);
+const signToken = require(`${__dirname}/../token`);
 
 const saltRounds = 10;
 
