@@ -113,6 +113,7 @@ exports.updatePost = async (req, res) => {
 
         newPost.caption = caption;
         newPost.updated_on = Date.now();
+        console.log(req.body);
 
         // finding the post to be updated
         let post = await Post.findById(req.params.id);
@@ -152,7 +153,7 @@ exports.deletePost = async (req, res) => {
     try {
 
         // finding the post to be deleted
-        const post = await Post.findById(req.params.id);
+        let post = await Post.findById(req.params.id);
         if (!post) {
             return res.status(404).send("Not found");
         }
