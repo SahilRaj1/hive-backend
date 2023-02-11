@@ -28,6 +28,9 @@ const UserSchema = new mongoose.Schema({
     bio: {
         type: String
     },
+    // otp: {
+    //     type: Number
+    // },
     following: [{
         type: mongoose.Schema.ObjectId,
         ref: 'User'

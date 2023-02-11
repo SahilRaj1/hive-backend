@@ -2,6 +2,7 @@ const User = require(`${__dirname}/../models/UserModel`);
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const signToken = require(`${__dirname}/../middlewares/createToken`);
+// const otpGenerator = require("otp-generator");
 
 const saltRounds = 10;
 
@@ -128,6 +129,27 @@ exports.updatePassword = async (req, res) => {
             },
         });
     } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal server error");
+    }
+}
+
+// POST /auth/forgetPassword : Update the user password
+exports.forgetPassword = async(req, res)=> {
+    try{
+        // verifying the user
+        email = req.body.email;
+        const user = await User.findOne({ email: req.body.email });
+        if (!user) {
+          return res.status(404).send("User not found");
+        }
+
+        //generate the otp
+        
+
+
+    }catch(error)
+    {
         console.log(error.message);
         res.status(500).send("Internal server error");
     }
