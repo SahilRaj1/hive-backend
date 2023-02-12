@@ -136,7 +136,12 @@ exports.deletePost = async (req, res) => {
             return res.status(404).send("Not found");
         }
 
-        // deletign all the likes and comments on the post
+        // checking if a user is deleting someone else's post
+        if (post.user_id.toString() !== req.user.id) {
+            return res.status(401).send("Not allowed");
+        }
+
+        // deleting all the likes and comments on the post
         Like.deleteMany({post_id: req.params.id});
         Comment.deleteMany({post_id: req.params.id});
 

@@ -28,13 +28,19 @@ exports.fetchLikesOnPost = async (req, res) => {
 exports.likePost = async (req, res) => {
     try {
 
-        // creating new like object
-        const like = {
-            user_id: req.user.id,
-            post_id: req.params.id,
+        // finding if like already exists
+        const like = await Like.findOne({user_id: req.params.id});
+        if (like) {
+            return res.status(404).send("Already exists");
         }
 
-        const savedLike = await like.save();
+        // creating new like object
+        const newLike = new Like({
+            user_id: req.user.id,
+            post_id: req.params.id,
+        });
+
+        const savedLike = await newLike.save();
 
         // sending response
         res.status(201).json({
@@ -51,14 +57,19 @@ exports.likePost = async (req, res) => {
     }
 };
 
-// DELETE /posts/:id/like/:like_id : Unlike a specific post (Login Required)
+// DELETE /posts/:id/likes/:like_id : Unlike a specific post (Login Required)
 exports.unlikePost = async (req, res) => {
     try {
         
         // finding the like to be deleted
-        const like = await post.findById(req.params.like_id);
+        const like = await Like.findById(req.params.like_id);
         if (!like) {
             return res.status(404).send("Not found");
+        }
+
+        // checking if a user is deleting someone else's like
+        if (like.user_id.toString() !== req.user.id) {
+            return res.status(401).send("Not allowed");
         }
 
         // deleting the like

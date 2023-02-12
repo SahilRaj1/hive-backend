@@ -32,11 +32,11 @@ exports.addComment = async (req, res) => {
         const { text } = req.body;
 
         // creating new comment object
-        const comment = {
+        const comment = new Comment({
             text,
             user_id: req.user.id,
             post_id: req.params.id,
-        }
+        })
 
         const savedComment = await comment.save();
 
