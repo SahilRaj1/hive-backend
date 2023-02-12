@@ -115,6 +115,28 @@ exports.deleteUser = async (req, res) => {
     }
 }
 
+// GET /users/:id/posts : Retrieve a list of all posts by a specific user (Login Required)
+exports.fetchAllPostsOfUser = async (req, res) => {
+    try {
+
+        // finding posts by the specified user
+        const posts = await Post.find({user_id: req.params.id});
+
+        // sending response
+        res.status(200).json({
+            status: 'success',
+            results: posts.length,
+            data: {
+              posts,
+            },
+        });
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal server error");
+    }
+};
+
 // PUT /users/follow : Add a follower to a specific user (A)
 exports.follow = async (req, res) => {
     try {

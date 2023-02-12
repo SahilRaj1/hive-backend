@@ -5,7 +5,6 @@ const postController = require(`${__dirname}/../controllers/postController`);
 const upload = require(`${__dirname}/../middlewares/uploadImage`);
 
 router.get("/", fetchUser, postController.fetchAllPosts);
-router.get("/:user_id", fetchUser, postController.fetchAllPostsOfUser);
 router.post("/", fetchUser, upload.single("img"), postController.createPost);
 router.get("/:id", fetchUser, postController.fetchPost);
 router.put("/:id", fetchUser, postController.updatePost);

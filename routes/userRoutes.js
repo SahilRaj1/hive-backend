@@ -9,7 +9,7 @@ router.get('/', fetchUser ,userController.getAllUsers);
 router.get('/:id', fetchUser ,userController.getUser);
 router.put('/:id', fetchUser ,userController.updateMe);
 router.delete('/:id', fetchUser ,userController.deleteUser);
-
+router.get('/:id/posts', fetchUser, userController.fetchAllPostsOfUser);
 
 
 module.exports = router;
