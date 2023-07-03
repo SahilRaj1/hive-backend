@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema({
 
@@ -36,15 +35,7 @@ const UserSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'User'
     }],
-    created_on: {
-        type: Date,
-        default: Date.now
-    },
-    updated_on: {
-        type: Date,
-        default: Date.now
-    }
 
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('users', UserSchema);

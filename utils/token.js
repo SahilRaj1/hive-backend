@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const env = require('dotenv');
-const path = require('path')
-env.config({ path: './.env' });
+env.config({ path: `${__dirname}/.env` });
 
 const signToken = (id) => {
 

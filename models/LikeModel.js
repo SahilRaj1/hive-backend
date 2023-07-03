@@ -12,11 +12,7 @@ const LikeSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    created_on: {
-        type: Date,
-        default: Date.now
-    },
 
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('likes', LikeSchema);

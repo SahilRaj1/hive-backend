@@ -14,15 +14,7 @@ const PostSchema = new mongoose.Schema({
     caption: {
         type: String,
     },
-    created_on: {
-        type: Date,
-        default: Date.now
-    },
-    updated_on: {
-        type: Date,
-        default: Date.now
-    }
 
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('posts', PostSchema);

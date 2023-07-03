@@ -5,14 +5,18 @@ const Post = require(`${__dirname}/../models/PostModel`);
 exports.fetchCommentsOnPost = async (req, res) => {
     try {
 
+        let success = false
+
         // finding the comments on a post
         const comments = await Comment.find({
             post_id: req.params.id,
         });
 
+        success = true;
+
         // sending response
         res.status(200).json({
-            status: 'success',
+            success,
             results: comments.length,
             data: {
               comments,
@@ -29,6 +33,8 @@ exports.fetchCommentsOnPost = async (req, res) => {
 exports.addComment = async (req, res) => {
     try {
 
+        let success = false;
+
         const { text } = req.body;
 
         // creating new comment object
@@ -39,11 +45,11 @@ exports.addComment = async (req, res) => {
         })
 
         const savedComment = await comment.save();
+        success = true;
 
         // sending response
         res.status(201).json({
-            status: 'success',
-            results: 1,
+            success,
             data: {
               savedComment,
             },
@@ -58,6 +64,8 @@ exports.addComment = async (req, res) => {
 // PUT /posts/:id/comments/:comment_id : Update a specific comment on a specific post (Login Required)
 exports.updateComment = async (req, res) => {
     try {
+
+        let success = false;
 
         const { text } = req.body;
         const newComment = {};
@@ -83,10 +91,11 @@ exports.updateComment = async (req, res) => {
             { new: true }
         );
 
+        success = true;
+
         // sending response
         res.status(202).json({
-            status: 'success',
-            results: 1,
+            success,
             data: {
               comment,
             },
@@ -101,6 +110,8 @@ exports.updateComment = async (req, res) => {
 // DELETE /posts/:id/comments/:comment_id : Delete a specific comment on a specific post. (Login Required)
 exports.deleteComment = async (req, res) => {
     try {
+
+        let success = false;
 
         // finding the comment to be deleted
         const comment = await Comment.findById(req.params.comment_id);
@@ -118,11 +129,11 @@ exports.deleteComment = async (req, res) => {
 
         // deleting the post
         comment = await Comment.findByIdAndDelete(req.params.comment_id);
+        success = true;
 
         // sending response
         res.status(200).json({
-            status: 'success',
-            results: 1,
+            success,
             data: {
               comment,
             },

@@ -1,20 +1,20 @@
 const Post = require(`${__dirname}/../models/PostModel`);
 const Like = require(`${__dirname}/../models/LikeModel`);
 const Comment = require(`${__dirname}/../models/CommentModel`);
-const multer = require('multer');
-const sharp = require('sharp');
-const path = require('path');
 
 // GET /posts : Retrieve a list of all posts (Login Required)
 exports.fetchAllPosts = async (req, res) => {
     try {
 
+        let success = false;
+
         // finding all posts
         const posts = await Post.find();
+        success = true;
 
         // sending response
         res.status(200).json({
-            status: 'success',
+            success,
             results: posts.length,
             data: {
               posts,
@@ -31,6 +31,8 @@ exports.fetchAllPosts = async (req, res) => {
 exports.createPost = async (req, res) => {
     try {
 
+        let success = false;
+
         const { caption } = req.body;
 
         // creating new post object
@@ -41,11 +43,11 @@ exports.createPost = async (req, res) => {
         });
 
         const savedPost = await post.save();
+        success = true;
 
         // sending response
         res.status(201).json({
-            status: 'success',
-            results: 1,
+            success,
             data: {
               savedPost,
             },
@@ -60,6 +62,8 @@ exports.createPost = async (req, res) => {
 // GET /posts/:id : Retrieve a specific post by id (Login Required)
 exports.fetchPost = async (req, res) => {
     try {
+        
+        let success = false;
 
         // finding the post to be fetched
         const post = await Post.findById(req.params.id);
@@ -67,10 +71,11 @@ exports.fetchPost = async (req, res) => {
             return res.status(404).send("Not Found");
         }
 
+        success = true;
+
         // sending response
         res.status(200).json({
-            status: 'success',
-            results: 1,
+            success,
             data: {
               post,
             },
@@ -85,6 +90,8 @@ exports.fetchPost = async (req, res) => {
 // PUT /posts/:id : Update a specific post by id (Login Required)
 exports.updatePost = async (req, res) => {
     try {
+
+        success = false;
 
         const { caption } = req.body;
         const newPost = {};
@@ -111,10 +118,11 @@ exports.updatePost = async (req, res) => {
             { new: true }
         );
 
+        success = true;
+
         // sending response
         res.status(202).json({
-            status: 'success',
-            results: 1,
+            success,
             data: {
               post,
             },
@@ -129,6 +137,8 @@ exports.updatePost = async (req, res) => {
 // DELETE /posts/:id : Delete a specific post by id (Login Required)
 exports.deletePost = async (req, res) => {
     try {
+
+        let success = false;
 
         // finding the post to be deleted
         let post = await Post.findById(req.params.id);
@@ -147,11 +157,11 @@ exports.deletePost = async (req, res) => {
 
         // deleting the post
         post = await Post.findByIdAndDelete(req.params.id);
+        success = true;
 
         // sending response
         res.status(200).json({
-            status: 'success',
-            results: 1,
+            success,
             data: {
               post,
             },

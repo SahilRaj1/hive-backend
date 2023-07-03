@@ -4,15 +4,18 @@ const Like = require(`${__dirname}/../models/LikeModel`);
 exports.fetchLikesOnPost = async (req, res) => {
     try {
 
+        let success = true;
+
         // finding the likes on a post
         const likes = await Like.find({
             post_id: req.params.id,
         });
 
+        success = true;
+
         // sending response
         res.status(200).json({
-            status: 'success',
-            results: likes.length,
+            success,
             data: {
               likes,
             },
@@ -28,6 +31,8 @@ exports.fetchLikesOnPost = async (req, res) => {
 exports.likePost = async (req, res) => {
     try {
 
+        let success = false;
+
         // finding if like already exists
         const like = await Like.findOne({user_id: req.params.id});
         if (like) {
@@ -41,11 +46,11 @@ exports.likePost = async (req, res) => {
         });
 
         const savedLike = await newLike.save();
+        success = true;
 
         // sending response
         res.status(201).json({
-            status: 'success',
-            results: 1,
+            success,
             data: {
               savedLike,
             },
@@ -60,6 +65,8 @@ exports.likePost = async (req, res) => {
 // DELETE /posts/:id/likes/:like_id : Unlike a specific post (Login Required)
 exports.unlikePost = async (req, res) => {
     try {
+
+        let success = false;
         
         // finding the like to be deleted
         const like = await Like.findById(req.params.like_id);
@@ -74,11 +81,11 @@ exports.unlikePost = async (req, res) => {
 
         // deleting the like
         like = await Like.findByIdAndDelete(req.params.like_id);
+        success = true;
 
         // sending response
         res.status(200).json({
-            status: 'success',
-            results: 1,
+            success,
             data: {
               like,
             },

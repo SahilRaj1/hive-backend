@@ -1,14 +1,18 @@
 const User = require(`${__dirname}/../models/UserModel`);
 const Post = require(`${__dirname}/../models/PostModel`);
-const mongoose = require('mongoose');
 
 // GET /users : Retrieve a list of all users (login required)
 exports.getAllUsers = async (req, res) => {
     try {
+
+        let success = false;
+
         const users = await User.find();
+        success = true;
+
         //SEND RESPONSE
         res.status(200).json({
-            status: 'success',
+            success,
             results: users.length,
             data: {
                 users,
@@ -25,19 +29,23 @@ exports.getAllUsers = async (req, res) => {
 // GET /users/:id : Retrieve a specific user by id (login required)
 exports.getUser = async (req, res) => {
     try {
+
+        let success = false;
+
         const user = await User.findById(req.params.id);
         if (!user) {
             res.status(404).send("User not found");
         }
+
+        success = true;
+
         //SEND RESPONSE
         res.status(200).json({
-            status: 'success',
-            results: 1,
+            success,
             data: {
                 user,
             },
         });
-
 
     } catch (error) {
         console.log(error.message);
@@ -48,6 +56,9 @@ exports.getUser = async (req, res) => {
 // PUT /users/:id : Update a specific user by id (login required)
 exports.updateMe = async (req, res) => {
     try {
+
+        let success = false;
+
         const { name, email, username, profile_pic, bio } = req.body;
         const newUser = {};
         if (name) {
@@ -65,7 +76,9 @@ exports.updateMe = async (req, res) => {
         if (bio) {
             newUser.bio = bio;
         }
+        
         newUser.updated_on = Date.now();
+
         let user = await User.findById(req.params.id);
         if (!user) {
             return res.status(404).send("Not Found");
@@ -81,14 +94,17 @@ exports.updateMe = async (req, res) => {
             { new: true }
         );
 
+        success = true;
+
         res.status(200).json({
-            status: 'success',
+            success,
             data: {
                 user: updatedUser,
             },
         });
-    } catch (e) {
-        console.log(e.message);
+
+    } catch (error) {
+        console.log(error.message);
         res.status(500).send("Internal server error");
     }
 }
@@ -96,21 +112,32 @@ exports.updateMe = async (req, res) => {
 // DELETE /users/:id : Delete a specific user by id (login required)
 exports.deleteUser = async (req, res) => {
     try {
+
+        let success = false;
+
         let userDel = await User.findById(req.params.id);
+
         if (!userDel) {
             return res.status(404).send("Not Found");
         }
+
         if (req.user.id != req.params.id) {
             res.status(404).send("Not allowed");
         }
+
         const posts = await Post.deleteMany({ user_id: req.params.id });
         const user = await User.findByIdAndDelete(req.params.id);
+        success = true;
+
         res.status(204).json({
-            status: 'success',
-            data: null,
+            success,
+            data: {
+                user,
+            },
         });
-    } catch (e) {
-        console.log(e.message);
+
+    } catch (error) {
+        console.log(error.message);
         res.status(500).send("Internal server error");
     }
 }
@@ -118,13 +145,16 @@ exports.deleteUser = async (req, res) => {
 // GET /users/:id/posts : Retrieve a list of all posts by a specific user (Login Required)
 exports.fetchAllPostsOfUser = async (req, res) => {
     try {
+        
+        let success = false;
 
         // finding posts by the specified user
         const posts = await Post.find({user_id: req.params.id});
+        success = true;
 
         // sending response
         res.status(200).json({
-            status: 'success',
+            success,
             results: posts.length,
             data: {
               posts,
@@ -140,6 +170,9 @@ exports.fetchAllPostsOfUser = async (req, res) => {
 // PUT /users/follow : Add a follower to a specific user (A)
 exports.follow = async (req, res) => {
     try {
+
+        let success = false;
+
         // find the user 
         const follow_user = await User.findById(req.body.follow_user);
         if (!follow_user) {
@@ -158,6 +191,8 @@ exports.follow = async (req, res) => {
         // update followers of the other user
         const follow2 = await User.findByIdAndUpdate({ _id: req.body.follow_user }, { $push: { followers: req.user.id } });
 
+        success = true;
+
         res.status(200).json({
             status: 'success',
             data: {
@@ -165,8 +200,8 @@ exports.follow = async (req, res) => {
                 user2: follow2
             },
         });
-    } catch (e) {
-        console.log(e.message);
+    } catch (error) {
+        console.log(error.message);
         res.status(500).send("Internal server error");
     }
 }
@@ -174,6 +209,9 @@ exports.follow = async (req, res) => {
 // PUT /users/remove-follower : Remove follower from the follwers list of a current user
 exports.removeFollower = async (req, res) => {
     try {
+
+        let success = false;
+
         const follow_user = await User.findById(req.body.follow_user);
         if (!follow_user) {
             return res.status(404).send("User not found!");
@@ -191,16 +229,18 @@ exports.removeFollower = async (req, res) => {
         // update followers of the other user
         const follow2 = await User.findByIdAndUpdate({ _id: req.body.follow_user }, { $pull: { following: req.user.id } });
 
+        success = true;
+
         res.status(200).json({
-            status: 'success',
+            success,
             data: {
                 user: follow,
                 user2: follow2
             },
         });
 
-    } catch (e) {
-        console.log(e.message);
+    } catch (error) {
+        console.log(error.message);
         res.status(500).send("Internal server error");
     }
 }
@@ -208,6 +248,9 @@ exports.removeFollower = async (req, res) => {
 // PUT /users/unfollow : unfollow a user
 exports.unfollow = async (req, res) => {
     try {
+
+        let success = false;
+
         const follow_user = await User.findById(req.body.follow_user);
         if (!follow_user) {
             return res.status(404).send("User not found!");
@@ -225,16 +268,18 @@ exports.unfollow = async (req, res) => {
         // update followers of the other user
         const follow2 = await User.findByIdAndUpdate({ _id: req.body.follow_user }, { $pull: { followers: req.user.id } });
 
+        success = true;
+
         res.status(200).json({
-            status: 'success',
+            success,
             data: {
                 user: follow,
                 user2: follow2
             },
         });
 
-    } catch (e) {
-        console.log(e.message);
+    } catch (error) {
+        console.log(error.message);
         res.status(500).send("Internal server error");
     }
 }
@@ -242,18 +287,20 @@ exports.unfollow = async (req, res) => {
 // GET /users/follower-list : Get the list of followers
 exports.followerList = async (req, res) => {
     try {
+        let success = false;
         const user = await User.findById(req.params.id);
         if (!user) {
             return res.status(404).send("User not found!");
         }
+        success = true;
         res.status(200).json({
-            status: 'success',
+            success,
             data: {
                 followers: user.followers
             },
         });
-    } catch (e) {
-        console.log(e.message);
+    } catch (error) {
+        console.log(error.message);
         res.status(500).send("Internal server error");
     }
 }
@@ -261,18 +308,20 @@ exports.followerList = async (req, res) => {
 // GET /users/following-list : Get the list of following
 exports.followingList = async (req, res) => {
     try {
+        let success = false;
         const user = await User.findById(req.params.id);
         if (!user) {
             return res.status(404).send("User not found!");
         }
+        success = true;
         res.status(200).json({
             status: 'success',
             data: {
                 following: user.following
             },
         });
-    } catch (e) {
-        console.log(e.message);
+    } catch (error) {
+        console.log(error.message);
         res.status(500).send("Internal server error");
     }
 }
